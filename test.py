@@ -1,33 +1,49 @@
 from solution import Solution
+import json
 
-def run_tests():
-    sol = Solution()
+class Test:
+    def run_tests(self):
+        sol = Solution()
+        test_cases = [
+            ([0, 1], 2),
+            ([0, 1, 0], 2),
+            ([0, 0, 1, 1, 0], 4),
+            ([0, 0, 1, 0, 0, 0, 1, 1], 6),
+            ([0, 0, 0], 0),
+            ([1, 1, 1], 0),
+        ]
 
-    # Test case 1
-    nums1 = [0, 1]
-    assert sol.findMaxLength(nums1) == 2, f"Failed on input {nums1}"
+        passed = 0
+        failed_cases = []
 
-    # Test case 2
-    nums2 = [0, 1, 0]
-    assert sol.findMaxLength(nums2) == 2, f"Failed on input {nums2}"
+        for i, (nums, expected) in enumerate(test_cases, 1):
+            result = sol.findMaxLength(nums)
+            if result == expected:
+                passed += 1
+            else:
+                failed_cases.append({
+                    "test_case_number": i,
+                    "input": nums,
+                    "expected": expected,
+                    "received": result
+                })
 
-    # Test case 3
-    nums3 = [0, 0, 1, 1, 0]
-    assert sol.findMaxLength(nums3) == 4, f"Failed on input {nums3}"
+        total = len(test_cases)
 
-    # Test case 4
-    nums4 = [0, 0, 1, 0, 0, 0, 1, 1]
-    assert sol.findMaxLength(nums4) == 6, f"Failed on input {nums4}"
+        print(f"\n{passed}/{total} test cases passed.")
 
-    # Test case 5 - all 0s
-    nums5 = [0, 0, 0]
-    assert sol.findMaxLength(nums5) == 0, f"Failed on input {nums5}"
+        if failed_cases:
+            print("\nFailed Test Cases:")
+            for fail in failed_cases:
+                print(f"  Test #{fail['test_case_number']} - Input: {fail['input']}")
+                print(f"    Expected: {fail['expected']}, Received: {fail['received']}")
 
-    # Test case 6 - all 1s
-    nums6 = [1, 1, 1]
-    assert sol.findMaxLength(nums6) == 0, f"Failed on input {nums6}"
+        result_summary = (passed, total, failed_cases)
+        result_str = json.dumps(result_summary)
+        print(f"\n===TEST_RESULT_START===\n{result_str}\n===TEST_RESULT_END===")
+        return result_summary
 
-    print("All tests passed!")
 
 if __name__ == "__main__":
-    run_tests()
+    tester = Test()
+    result = tester.run_tests()
